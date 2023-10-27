@@ -1,0 +1,21 @@
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+  "email": "weiwei@gmail.com",
+  "password": "123"
+}
+
+###
+POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+  "name": "arya",
+  "email": "arya@gmail.com",
+  "password": "123"
+}
+
+###
+GET http://localhost:8000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcklkIjoiN2JjMjM4M2QtMjA4NS00MWRkLWEwYjgtZjZjYzQyYTAyOTE3IiwibmFtZSI6IndlaSIsImVtYWlsIjoid2Vpd2VpQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTg0MjgwNjQsImV4cCI6MTY5ODQyOTg2NCwidHlwZSI6ImFjY2VzcyJ9.3PZdRy0uSQA5ixkuEic_t4MOIdr_TXIrPztW6T99-Ww
