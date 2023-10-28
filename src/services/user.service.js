@@ -37,3 +37,11 @@ export const createNewUser = async ({ name, email, password }) => {
 export const getUsers = async () => {
   return await db.user.findMany({});
 };
+
+export const getUserById = async (id) => {
+  return await db.user.findFirst({
+    where: {
+      id,
+    },
+  });
+};

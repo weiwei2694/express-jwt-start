@@ -1,5 +1,11 @@
-import { loginByEmailAndPassword } from '../services/auth.service.js';
-import { generateAuthTokens } from '../services/token.service.js';
+import {
+  loginByEmailAndPassword,
+  refreshToken,
+} from '../services/auth.service.js';
+import {
+  generateAuthTokens,
+  getRefreshToken,
+} from '../services/token.service.js';
 import { createNewUser, getUserByEmail } from '../services/user.service.js';
 
 export const login = async (req, res) => {
@@ -69,6 +75,31 @@ export const register = async (req, res) => {
   } catch (error) {
     console.info('[ERROR_REGISTER]', error);
     res.status(500).json({
+      message: error,
+    });
+  }
+};
+
+export const refreshTokenController = async (req, res) => {
+  try {
+    const token = req.body.refreshToken;
+    const existingToken = await getRefreshToken(token);
+
+    if (!existingToken) {
+      return res.sendStatus(401);
+    }
+
+    const tokens = await refreshToken(token);
+
+    res.cookie('refreshToken', tokens.refresh.token, {
+      httpOnly: true,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(500).json({ data: tokens });
+  } catch (error) {
+    console.info('[ERROR_REFRESH_TOKEN_CONTROLLER]', error);
+    res.send(500).json({
       message: error,
     });
   }

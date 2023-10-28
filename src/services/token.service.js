@@ -86,8 +86,6 @@ export const generateAuthTokens = async (user) => {
     type: tokenTypes.REFRESH,
   });
 
-  console.info(refreshToken);
-
   await saveToken({
     token: refreshToken,
     userId: id,
@@ -105,4 +103,36 @@ export const generateAuthTokens = async (user) => {
       expires: refreshTokenExpires.toDate(),
     },
   };
+};
+
+export const getRefreshToken = async (token, type) => {
+  try {
+    return await db.token.findFirst({
+      where: {
+        token,
+        type,
+      },
+    });
+  } catch (error) {
+    console.info('[ERROR_GET_REFRESH_TOKEN_SERVICE]', error);
+  }
+};
+
+export const verifyToken = async (token, type) => {
+  try {
+    const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+
+    const tokenDoc = await db.token.findFirst({
+      where: {
+        token,
+        type,
+        userId: payload.sub.userId,
+        blacklisted: false,
+      },
+    });
+
+    return tokenDoc;
+  } catch (error) {
+    console.info('[ERROR_VERIFY_TOKEN_SERVICE]', error);
+  }
 };

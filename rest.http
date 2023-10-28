@@ -7,12 +7,20 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:8000/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcklkIjoiN2JjMjM4M2QtMjA4NS00MWRkLWEwYjgtZjZjYzQyYTAyOTE3IiwibmFtZSI6IndlaSIsImVtYWlsIjoid2Vpd2VpQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTg0OTAwODUsImV4cCI6MTcwMTA4MjA4NSwidHlwZSI6InJlZnJlc2gifQ.YfnFh-tQmj4F2momMAiSTnHTwMrKX3GU9BebhqPuSBM"
+}
+
+###
 POST http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-  "name": "arya",
-  "email": "arya@gmail.com",
+  "name": "priema",
+  "email": "priema@gmail.com",
   "password": "123"
 }
 
