@@ -9,7 +9,6 @@ import helmet from 'helmet';
 import xss from 'xss-clean';
 import compression from 'compression';
 import morgan from 'morgan';
-import NotFound from './middlewares/404.middleware.js';
 import cookieParser from 'cookie-parser';
 import router from './routes/api/index.js';
 
@@ -32,7 +31,9 @@ app.use(compression());
 app.use(router);
 // End Of Router
 
-app.all(NotFound);
+app.all('*', (req, res) => {
+  return res.sendStatus(404);
+});
 app.use(ErrorHandler);
 app.listen(PORT, () =>
   console.info(`Server listening on http://localhost:${PORT}`)
