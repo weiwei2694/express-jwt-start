@@ -56,7 +56,7 @@ export const register = async (req, res) => {
 
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
-      res.status(400).json({
+      return res.status(400).json({
         messaage: 'email already taken',
       });
     }
