@@ -23,7 +23,7 @@ export const login = async (req, res) => {
 
     res.cookie('refreshToken', tokens.refresh.token, {
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
