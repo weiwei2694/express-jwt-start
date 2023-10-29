@@ -121,6 +121,7 @@ export const getRefreshToken = async (token, type) => {
 export const verifyToken = async (token, type) => {
   try {
     const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
+    if (!payload) return null;
 
     const tokenDoc = await db.token.findFirst({
       where: {
@@ -131,7 +132,16 @@ export const verifyToken = async (token, type) => {
       },
     });
 
-    return tokenDoc;
+    if (!tokenDoc) return null;
+
+    const user = await db.user.findFirst({
+      where: {
+        id: tokenDoc.userId,
+      },
+    });
+    if (!user) return null;
+
+    return user;
   } catch (error) {
     console.info('[ERROR_VERIFY_TOKEN_SERVICE]', error);
   }

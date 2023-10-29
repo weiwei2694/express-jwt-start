@@ -1,9 +1,9 @@
 import tokenTypes from '../config/tokens.config.js';
-import { generateAuthTokens, verifyToken } from './token.service.js';
+import { generateToken, verifyToken } from './token.service.js';
 import { getUserByEmail, getUserById } from './user.service.js';
 import bcrypt from 'bcryptjs';
 const { compare } = bcrypt;
-import db from '../../prisma/client.js';
+import moment from 'moment';
 
 export const loginByEmailAndPassword = async ({ email, password }) => {
   const user = await getUserByEmail(email);
@@ -16,15 +16,33 @@ export const loginByEmailAndPassword = async ({ email, password }) => {
 
 export const refreshToken = async (token) => {
   try {
-    const refreshTokenDoc = await verifyToken(token, tokenTypes.REFRESH);
+    const user = await verifyToken(token, tokenTypes.REFRESH);
+    if (!user) return null;
 
-    const user = await getUserById(refreshTokenDoc.userId);
+    const { name, email, id: userId } = user;
+    const dataUser = {
+      name,
+      email,
+      userId,
+    };
 
-    await db.token.delete({
-      where: { id: refreshTokenDoc.id },
+    const accessTokenExpires = moment().add(
+      process.env.ACCESS_TOKEN_EXPIRED,
+      'minutes'
+    );
+    const accessToken = await generateToken({
+      user: dataUser,
+      secret: process.env.ACCESS_TOKEN_SECRET,
+      expired: accessTokenExpires,
+      type: tokenTypes.ACCESS,
     });
 
-    return generateAuthTokens(user);
+    return {
+      access: {
+        token: accessToken,
+        expires: accessTokenExpires.toDate(),
+      },
+    };
   } catch (error) {
     console.info('[ERROR_REFRESH_TOKEN]', error);
   }

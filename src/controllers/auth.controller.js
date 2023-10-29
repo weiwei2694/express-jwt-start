@@ -1,3 +1,4 @@
+import tokenTypes from '../config/tokens.config.js';
 import {
   loginByEmailAndPassword,
   refreshToken,
@@ -5,6 +6,7 @@ import {
 import {
   generateAuthTokens,
   getRefreshToken,
+  verifyToken,
 } from '../services/token.service.js';
 import { createNewUser, getUserByEmail } from '../services/user.service.js';
 
@@ -83,20 +85,15 @@ export const register = async (req, res) => {
 export const refreshTokenController = async (req, res) => {
   try {
     const token = req.body.refreshToken;
-    const existingToken = await getRefreshToken(token);
 
-    if (!existingToken) {
-      return res.sendStatus(401);
-    }
+    const existingToken = await getRefreshToken(token);
+    if (!existingToken) return res.sendStatus(401);
+
+    const user = await verifyToken(token, tokenTypes.REFRESH);
+    if (!user) return res.sendStatus(401);
 
     const tokens = await refreshToken(token);
-
-    res.cookie('refreshToken', tokens.refresh.token, {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
-
-    res.status(500).json({ data: tokens });
+    res.status(200).json({ data: tokens });
   } catch (error) {
     console.info('[ERROR_REFRESH_TOKEN_CONTROLLER]', error);
     res.send(500).json({
