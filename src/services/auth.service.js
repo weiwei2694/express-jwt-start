@@ -19,11 +19,12 @@ export const refreshToken = async (token) => {
   const user = await verifyToken(token, tokenTypes.REFRESH);
   if (!user) return null;
 
-  const { name, email, id: userId } = user;
+  const { name, email, id: userId, role } = user;
   const dataUser = {
     name,
     email,
     userId,
+    role,
   };
 
   const accessTokenExpires = moment().add(

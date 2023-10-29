@@ -52,16 +52,18 @@ export const saveToken = async ({
 };
 
 export const generateAuthTokens = async (user) => {
-  const { name, email, id } = user;
+  const { name, email, id, role } = user;
 
   if (!name) throw new Error('name not found');
   if (!email) throw new Error('email not found');
   if (!id) throw new Error('id not found');
+  if (!role) throw new Error('role not found');
 
   const dataUser = {
     userId: id,
     name,
     email,
+    role,
   };
 
   const accessTokenExpires = moment().add(
@@ -120,7 +122,6 @@ export const getRefreshToken = async (token, type) => {
 
 export const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-
   if (!payload) return null;
 
   const tokenDoc = await db.token.findFirst({

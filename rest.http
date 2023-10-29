@@ -2,7 +2,7 @@ POST http://localhost:8000/auth/login
 Content-Type: application/json
 
 {
-  "email": "weiwei@gmail.com",
+  "email": "priema@gmail.com",
   "password": "123"
 }
 
@@ -19,7 +19,7 @@ POST http://localhost:8000/auth/logout
 Content-Type: application/json
 
 {
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcklkIjoiN2JjMjM4M2QtMjA4NS00MWRkLWEwYjgtZjZjYzQyYTAyOTE3IiwibmFtZSI6IndlaSIsImVtYWlsIjoid2Vpd2VpQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTg1NjU1NDIsImV4cCI6MTcwMTE1NzU0MiwidHlwZSI6InJlZnJlc2gifQ.g4ItfHnvtTL9UFni2AMRIiflKMwHR7o-SuH0xmCTXYg"
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcklkIjoiMWM3YTFkMDUtMzViOC00M2I5LWIwYTMtMzUxMTU0ODNjZjIxIiwibmFtZSI6InByaWVtYSIsImVtYWlsIjoicHJpZW1hQGdtYWlsLmNvbSJ9LCJpYXQiOjE2OTg1NjgzMTUsImV4cCI6MTcwMTE2MDMxNSwidHlwZSI6InJlZnJlc2gifQ.vyGBqqO0jZq_O9X6XyOpyMN6GA00z_HILP3VeX7UzYQ"
 }
 
 ###
@@ -34,4 +34,4 @@ Content-Type: application/json
 
 ###
 GET http://localhost:8000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsibmFtZSI6IndlaSIsImVtYWlsIjoid2Vpd2VpQGdtYWlsLmNvbSIsInVzZXJJZCI6IjdiYzIzODNkLTIwODUtNDFkZC1hMGI4LWY2Y2M0MmEwMjkxNyJ9LCJpYXQiOjE2OTg1NjU1NjgsImV4cCI6MTY5ODU2NzM2OCwidHlwZSI6ImFjY2VzcyJ9.YgdUf__wz9lVQngviY_IvmI3p8x89Ij1vxR4k2mJ_5M
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOnsidXNlcklkIjoiMWM3YTFkMDUtMzViOC00M2I5LWIwYTMtMzUxMTU0ODNjZjIxIiwibmFtZSI6InByaWVtYSIsImVtYWlsIjoicHJpZW1hQGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIn0sImlhdCI6MTY5ODU4NzAyNSwiZXhwIjoxNjk4NTg3MzI1LCJ0eXBlIjoiYWNjZXNzIn0.nKyxGJuQhEAADHXKHx0QeObDmqkKYszQOFJjq3zMvaI
