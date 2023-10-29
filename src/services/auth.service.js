@@ -1,6 +1,7 @@
 import tokenTypes from '../config/tokens.config.js';
 import { generateToken, verifyToken } from './token.service.js';
-import { getUserByEmail, getUserById } from './user.service.js';
+import { getUserByEmail } from './user.service.js';
+import db from '../../prisma/client.js';
 import bcrypt from 'bcryptjs';
 const { compare } = bcrypt;
 import moment from 'moment';
@@ -15,35 +16,52 @@ export const loginByEmailAndPassword = async ({ email, password }) => {
 };
 
 export const refreshToken = async (token) => {
-  try {
-    const user = await verifyToken(token, tokenTypes.REFRESH);
-    if (!user) return null;
+  const user = await verifyToken(token, tokenTypes.REFRESH);
+  if (!user) return null;
 
-    const { name, email, id: userId } = user;
-    const dataUser = {
-      name,
-      email,
-      userId,
-    };
+  const { name, email, id: userId } = user;
+  const dataUser = {
+    name,
+    email,
+    userId,
+  };
 
-    const accessTokenExpires = moment().add(
-      process.env.ACCESS_TOKEN_EXPIRED,
-      'minutes'
-    );
-    const accessToken = await generateToken({
-      user: dataUser,
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      expired: accessTokenExpires,
-      type: tokenTypes.ACCESS,
-    });
+  const accessTokenExpires = moment().add(
+    process.env.ACCESS_TOKEN_EXPIRED,
+    'minutes'
+  );
+  const accessToken = await generateToken({
+    user: dataUser,
+    secret: process.env.ACCESS_TOKEN_SECRET,
+    expired: accessTokenExpires,
+    type: tokenTypes.ACCESS,
+  });
 
-    return {
-      access: {
-        token: accessToken,
-        expires: accessTokenExpires.toDate(),
-      },
-    };
-  } catch (error) {
-    console.info('[ERROR_REFRESH_TOKEN]', error);
-  }
+  return {
+    access: {
+      token: accessToken,
+      expires: accessTokenExpires.toDate(),
+    },
+  };
+};
+
+export const logout = async (token) => {
+  const refreshToken = await db.token.findFirst({
+    where: {
+      token,
+      type: tokenTypes.REFRESH,
+      blacklisted: false,
+    },
+  });
+
+  if (!refreshToken) return null;
+
+  return await db.token.update({
+    where: {
+      id: refreshToken.id,
+    },
+    data: {
+      blacklisted: true,
+    },
+  });
 };

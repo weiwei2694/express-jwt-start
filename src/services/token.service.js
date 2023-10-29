@@ -119,30 +119,27 @@ export const getRefreshToken = async (token, type) => {
 };
 
 export const verifyToken = async (token, type) => {
-  try {
-    const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
-    if (!payload) return null;
+  const payload = jwt.verify(token, process.env.REFRESH_TOKEN_SECRET);
 
-    const tokenDoc = await db.token.findFirst({
-      where: {
-        token,
-        type,
-        userId: payload.sub.userId,
-        blacklisted: false,
-      },
-    });
+  if (!payload) return null;
 
-    if (!tokenDoc) return null;
+  const tokenDoc = await db.token.findFirst({
+    where: {
+      token,
+      type,
+      userId: payload.sub.userId,
+      blacklisted: false,
+    },
+  });
 
-    const user = await db.user.findFirst({
-      where: {
-        id: tokenDoc.userId,
-      },
-    });
-    if (!user) return null;
+  if (!tokenDoc) return null;
 
-    return user;
-  } catch (error) {
-    console.info('[ERROR_VERIFY_TOKEN_SERVICE]', error);
-  }
+  const user = await db.user.findFirst({
+    where: {
+      id: tokenDoc.userId,
+    },
+  });
+  if (!user) return null;
+
+  return user;
 };

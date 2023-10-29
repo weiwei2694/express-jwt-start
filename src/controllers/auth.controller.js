@@ -1,6 +1,7 @@
 import tokenTypes from '../config/tokens.config.js';
 import {
   loginByEmailAndPassword,
+  logout,
   refreshToken,
 } from '../services/auth.service.js';
 import {
@@ -96,6 +97,27 @@ export const refreshTokenController = async (req, res) => {
     res.status(200).json({ data: tokens });
   } catch (error) {
     console.info('[ERROR_REFRESH_TOKEN_CONTROLLER]', error);
+    res.send(500).json({
+      message: error,
+    });
+  }
+};
+
+export const logoutController = async (req, res) => {
+  try {
+    const token = req.body.refreshToken;
+
+    const existingToken = await getRefreshToken(token);
+    if (!existingToken) return res.sendStatus(401);
+
+    const user = await verifyToken(token, tokenTypes.REFRESH);
+    if (!user) return res.sendStatus(401);
+
+    await logout(token);
+
+    res.sendStatus(200);
+  } catch (error) {
+    console.info('[ERROR_LOGOUT_CONTROLLER]', error);
     res.send(500).json({
       message: error,
     });
