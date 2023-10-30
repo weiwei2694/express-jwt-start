@@ -1,6 +1,13 @@
 # Express Jwt: Express, Jsonwebtoken, Prisma, MySQL
 
-practice creating a jsonwebtoken using express
+## Key Features
+- Roles
+- Middlewares
+- Jwt
+- ORM using Prisma
+- MySQL Database
+- Cookie
+- Http Only
 
 ## Cloning the repository
 
